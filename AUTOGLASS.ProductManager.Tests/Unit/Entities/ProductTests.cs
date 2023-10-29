@@ -25,11 +25,37 @@ namespace AUTOGLASS.ProductManager.Tests.Unit.Entities
             var product = new Product(dto);
 ;
             //assert
-            product.Enabled.Should().BeTrue();
+            product.Status.Should().BeTrue();
             product.Description.Should().Be(dto.Description);
             product.CreateDate.Should().Be(dto.CreateDate);
             product.ExpirationDate.Should().Be(dto.ExpirationDate);
             product.Supplier.Should().Be(dto.Supplier);
+        }
+
+        [Fact]
+        public void Should_disable_product()
+        {
+            //arrange
+            var product = new ProductBuilder().Build();
+
+            //action
+            product.Disable();
+
+            //assert
+            product.Status.Should().BeFalse();
+        }
+
+        [Fact]
+        public void Should_active_product()
+        {
+            //arrange
+            var product = new ProductBuilder().Build();
+
+            //action
+            product.Active();
+
+            //assert
+            product.Status.Should().BeTrue();
         }
     }
 }

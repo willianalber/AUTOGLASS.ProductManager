@@ -11,14 +11,24 @@ namespace AUTOGLASS.ProductManager.Domain.Entities
             ExpirationDate = dto.ExpirationDate;
             SupplierId = dto.Supplier.Id;
             Supplier = dto.Supplier;
-            Enabled = true;
+            Status = true;
         }
 
         public string Description { get; private set; }
-        public bool Enabled { get; private set; }
+        public bool Status { get; private set; }
         public DateTime CreateDate { get; private set; }
         public DateTime ExpirationDate { get; private set; }
         public long SupplierId { get; private set; }
         public Supplier Supplier { get; private set; }
+
+        public void Active()
+        {
+            Status = true;
+        }
+
+        public void Disable()
+        {
+            Status = false;
+        }
     }
 }
