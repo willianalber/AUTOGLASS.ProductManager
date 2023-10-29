@@ -4,6 +4,7 @@ namespace AUTOGLASS.ProductManager.Domain.Entities
 {
     public class Product : EntityBase
     {
+        protected Product() { }
         public Product(ProductDto dto)
         {
             Description = dto.Description;
