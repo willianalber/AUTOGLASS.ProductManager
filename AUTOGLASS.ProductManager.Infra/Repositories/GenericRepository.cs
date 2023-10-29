@@ -27,23 +27,24 @@ namespace AUTOGLASS.ProductManager.Infra.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public IQueryable<TEntity> GetAll()
+        public async Task<IList<TEntity>> GetAll()
         {
-            return _dbContext.Set<TEntity>().AsNoTracking();
+            return await _dbContext.Set<TEntity>().ToListAsync();
         }
 
         public async Task<TEntity> GetById(long id)
         {
             return await _dbContext.Set<TEntity>()
-                .AsNoTracking()
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
 
-        public async Task Update(long id, TEntity entity)
+        public async Task Update(TEntity entity)
         {
             _dbContext.Set<TEntity>().Update(entity);
             await _dbContext.SaveChangesAsync();
         }
     }
-
 }
+ 
+
+

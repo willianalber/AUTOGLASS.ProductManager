@@ -1,4 +1,5 @@
-﻿using AUTOGLASS.ProductManager.Application.Models;
+﻿using AUTOGLASS.ProductManager.Domain.Dtos;
+using AUTOGLASS.ProductManager.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AUTOGLASS.ProductManager.Web.Controllers
@@ -7,10 +8,23 @@ namespace AUTOGLASS.ProductManager.Web.Controllers
     [ApiController]
     public class SupplierController : ControllerBase
     {
-        [HttpPost]
-        public void Post([FromBody] SupplierRequest supplierRequest)
-        {
+        private readonly ISupplierService _supplierService;
 
+        public SupplierController(ISupplierService supplierService)
+        {
+            _supplierService = supplierService;
+        }
+
+        [HttpPost]
+        public async Task Create([FromBody] SupplierDto supplierRequest)
+        {
+            await _supplierService.Create(supplierRequest);
+        }
+
+        [HttpGet]
+        public async Task<IEnumerable<SupplierDto>> GetAll()
+        {
+            return await _supplierService.GetAll();
         }
     }
 }

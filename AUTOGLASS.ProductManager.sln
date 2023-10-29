@@ -3,27 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Web", "1 - Web", "{EA131F91-4DBD-482A-A838-89F007823AB0}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Application", "2 - Application", "{27DE1F91-776F-4E3C-AB6B-CDCC2F9A7EA6}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Domain", "3 - Domain", "{041DB886-01AA-4EE1-AD86-858166B83D61}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - Infra", "4 - Infra", "{D81C730E-8627-444E-B8AA-A0EC11CAFB13}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5 - Tests", "5 - Tests", "{1BBC3A80-D400-4674-9921-1387E8CF3B0A}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AUTOGLASS.ProductManager.Application", "AUTOGLASS.ProductManager.Application\AUTOGLASS.ProductManager.Application.csproj", "{1F28BBE3-464D-4863-8BB0-DAB944A7A70F}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AUTOGLASS.ProductManager.Domain", "AUTOGLASS.ProductManager.Domain\AUTOGLASS.ProductManager.Domain.csproj", "{B55FDCEE-C76A-422D-9381-6C2D55CD2EEE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AUTOGLASS.ProductManager.Infra", "AUTOGLASS.ProductManager.Infra\AUTOGLASS.ProductManager.Infra.csproj", "{42A0AFD4-36E5-4D01-BAEC-19851A970697}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AUTOGLASS.ProductManager.Tests", "AUTOGLASS.ProductManager.Tests\AUTOGLASS.ProductManager.Tests.csproj", "{BF49813D-2BE4-4F53-BDD2-EBE1C170B23C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AUTOGLASS.ProductManager.Web", "AUTOGLASS.ProductManager.Web\AUTOGLASS.ProductManager.Web.csproj", "{D764DA17-E389-4F8F-9BEA-4CBB70B28039}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{2BF78E2E-4FD6-4852-945A-07B78B0DB09B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AUTOGLASS.ProductManager.Api", "AUTOGLASS.ProductManager.Web\AUTOGLASS.ProductManager.Api.csproj", "{D764DA17-E389-4F8F-9BEA-4CBB70B28039}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,10 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1F28BBE3-464D-4863-8BB0-DAB944A7A70F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1F28BBE3-464D-4863-8BB0-DAB944A7A70F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1F28BBE3-464D-4863-8BB0-DAB944A7A70F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1F28BBE3-464D-4863-8BB0-DAB944A7A70F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B55FDCEE-C76A-422D-9381-6C2D55CD2EEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B55FDCEE-C76A-422D-9381-6C2D55CD2EEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B55FDCEE-C76A-422D-9381-6C2D55CD2EEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -54,14 +36,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{1F28BBE3-464D-4863-8BB0-DAB944A7A70F} = {27DE1F91-776F-4E3C-AB6B-CDCC2F9A7EA6}
-		{B55FDCEE-C76A-422D-9381-6C2D55CD2EEE} = {041DB886-01AA-4EE1-AD86-858166B83D61}
-		{42A0AFD4-36E5-4D01-BAEC-19851A970697} = {D81C730E-8627-444E-B8AA-A0EC11CAFB13}
-		{BF49813D-2BE4-4F53-BDD2-EBE1C170B23C} = {1BBC3A80-D400-4674-9921-1387E8CF3B0A}
-		{D764DA17-E389-4F8F-9BEA-4CBB70B28039} = {EA131F91-4DBD-482A-A838-89F007823AB0}
-		{2BF78E2E-4FD6-4852-945A-07B78B0DB09B} = {27DE1F91-776F-4E3C-AB6B-CDCC2F9A7EA6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {73FE601E-A62B-483C-B21B-25E4836DA5BD}

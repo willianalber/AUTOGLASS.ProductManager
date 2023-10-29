@@ -5,13 +5,13 @@ namespace AUTOGLASS.ProductManager.Domain.Entities
     public class Product : EntityBase
     {
         protected Product() { }
-        public Product(ProductDto dto)
+        public Product(ProductDto dto, Supplier supplier)
         {
             Description = dto.Description;
             CreateDate = dto.CreateDate;
             ExpirationDate = dto.ExpirationDate;
-            SupplierId = dto.Supplier.Id;
-            Supplier = dto.Supplier;
+            SupplierId = supplier.Id;
+            Supplier = supplier;
             Status = true;
         }
 
@@ -30,6 +30,13 @@ namespace AUTOGLASS.ProductManager.Domain.Entities
         public void Disable()
         {
             Status = false;
+        }
+
+        public void Update(ProductDto productDto)
+        {
+            Description = productDto.Description;
+            CreateDate = productDto.CreateDate;
+            ExpirationDate = productDto.ExpirationDate;
         }
     }
 }

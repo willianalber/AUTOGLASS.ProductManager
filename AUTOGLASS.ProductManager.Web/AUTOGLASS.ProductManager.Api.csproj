@@ -7,12 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+	  <PackageReference Include="Abp" Version="8.4.0" />
 	  <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AUTOGLASS.ProductManager.Application\AUTOGLASS.ProductManager.Application.csproj" />
+    <ProjectReference Include="..\AUTOGLASS.ProductManager.Domain\AUTOGLASS.ProductManager.Domain.csproj" />
     <ProjectReference Include="..\AUTOGLASS.ProductManager.Infra\AUTOGLASS.ProductManager.Infra.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
 
 </Project>

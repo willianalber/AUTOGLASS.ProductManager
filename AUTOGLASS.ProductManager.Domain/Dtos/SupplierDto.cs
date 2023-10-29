@@ -1,4 +1,4 @@
-﻿namespace AUTOGLASS.ProductManager.Application.Dtos
+﻿namespace AUTOGLASS.ProductManager.Domain.Dtos
 {
     public class SupplierDto
     {
