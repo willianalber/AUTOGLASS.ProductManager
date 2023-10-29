@@ -17,19 +17,18 @@ namespace AUTOGLASS.ProductManager.Tests.Unit.Entities
             {
                 CreateDate = DateTime.Now,
                 ExpirationDate = DateTime.Now.AddDays(1),
-                Supplier = supplier,
                 Description = "teste"
             };
 
             //action
-            var product = new Product(dto);
+            var product = new Product(dto, supplier);
 ;
             //assert
             product.Status.Should().BeTrue();
             product.Description.Should().Be(dto.Description);
             product.CreateDate.Should().Be(dto.CreateDate);
             product.ExpirationDate.Should().Be(dto.ExpirationDate);
-            product.Supplier.Should().Be(dto.Supplier);
+            product.Supplier.Should().Be(supplier);
         }
 
         [Fact]
