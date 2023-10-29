@@ -16,8 +16,4 @@
     <ProjectReference Include="..\AUTOGLASS.ProductManager.Infra\AUTOGLASS.ProductManager.Infra.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
 </Project>

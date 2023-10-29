@@ -24,6 +24,7 @@ namespace AUTOGLASS.ProductManager.Domain.Services
             var suppliers = await _supplierRepository.GetAll();
             return suppliers.Select(x => new SupplierDto
             {
+                Id = x.Id,
                 Description = x.Description,
                 Cnpj = x.Cnpj
             });

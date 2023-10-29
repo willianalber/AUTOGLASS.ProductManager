@@ -1,10 +1,14 @@
-﻿using AUTOGLASS.ProductManager.Infra.Mappings;
+﻿using AUTOGLASS.ProductManager.Domain.Entities;
+using AUTOGLASS.ProductManager.Infra.Mappings;
 using Microsoft.EntityFrameworkCore;
 
 namespace AUTOGLASS.ProductManager.Infra.Contex
 {
     public class ProductManagerContext : DbContext
     {
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Supplier> Supplier { get; set; }
+
         public ProductManagerContext(DbContextOptions options) : base(options)
         {
             Database.EnsureCreated();
@@ -15,7 +19,7 @@ namespace AUTOGLASS.ProductManager.Infra.Contex
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.ApplyConfigurationsFromAssembly(typeof(ProductManagerContext).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ProductManagerContext).Assembly);
             modelBuilder.ApplyConfiguration(new ProductMapping());
             modelBuilder.ApplyConfiguration(new SupplierMapping());
         }

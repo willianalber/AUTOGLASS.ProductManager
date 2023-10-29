@@ -1,6 +1,6 @@
-﻿namespace AUTOGLASS.ProductManager.Domain.Dtos
+﻿namespace AUTOGLASS.ProductManager.Api.Models.Supplier
 {
-    public class SupplierDto
+    public class SupplierResponse
     {
         public long Id { get; set; }
         public string Description { get; set; }

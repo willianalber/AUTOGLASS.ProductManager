@@ -1,4 +1,5 @@
-﻿using AUTOGLASS.ProductManager.Domain.Dtos;
+﻿using AUTOGLASS.ProductManager.Api.Models.Supplier;
+using AUTOGLASS.ProductManager.Domain.Dtos;
 using AUTOGLASS.ProductManager.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,15 +17,27 @@ namespace AUTOGLASS.ProductManager.Web.Controllers
         }
 
         [HttpPost]
-        public async Task Create([FromBody] SupplierDto supplierRequest)
+        public async Task Create([FromBody] SupplierRequest supplierRequest)
         {
-            await _supplierService.Create(supplierRequest);
+            var supplierDto = new SupplierDto() 
+            { 
+                Description = supplierRequest.Description, 
+                Cnpj = supplierRequest.Cnpj 
+            };
+
+            await _supplierService.Create(supplierDto);
         }
 
         [HttpGet]
-        public async Task<IEnumerable<SupplierDto>> GetAll()
+        public async Task<IEnumerable<SupplierResponse>> GetAll()
         {
-            return await _supplierService.GetAll();
+            var suppliersDtos = await _supplierService.GetAll();
+            return suppliersDtos.Select(x => new SupplierResponse() 
+            {
+                Description = x.Description,
+                Cnpj = x.Cnpj,
+                Id = x.Id
+            });
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AUTOGLASS.ProductManager.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Reflection.Emit;
 
 namespace AUTOGLASS.ProductManager.Infra.Mappings
 {
@@ -11,6 +12,7 @@ namespace AUTOGLASS.ProductManager.Infra.Mappings
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
             builder.Property(d => d.Description).IsRequired();
+            builder.HasOne(p => p.Supplier).WithMany().HasForeignKey(p => p.SupplierId);
         }
     }
 }

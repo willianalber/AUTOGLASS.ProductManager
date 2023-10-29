@@ -1,4 +1,6 @@
 ﻿using AUTOGLASS.ProductManager.Application.Dtos;
+using AUTOGLASS.ProductManager.Domain.Validators;
+using FluentValidation.Results;
 
 namespace AUTOGLASS.ProductManager.Domain.Entities
 {
@@ -10,7 +12,6 @@ namespace AUTOGLASS.ProductManager.Domain.Entities
             Description = dto.Description;
             CreateDate = dto.CreateDate;
             ExpirationDate = dto.ExpirationDate;
-            SupplierId = supplier.Id;
             Supplier = supplier;
             Status = true;
         }
@@ -38,5 +39,7 @@ namespace AUTOGLASS.ProductManager.Domain.Entities
             CreateDate = productDto.CreateDate;
             ExpirationDate = productDto.ExpirationDate;
         }
+
+        public ValidationResult IsValid() => new ProductValidator().Validate(this);
     }
 }
