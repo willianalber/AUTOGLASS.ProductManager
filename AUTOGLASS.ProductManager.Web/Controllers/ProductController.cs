@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AUTOGLASS.ProductManager.Api.Models.Product;
+using AUTOGLASS.ProductManager.Application.Dtos;
+using AUTOGLASS.ProductManager.Domain.Dtos;
+using AUTOGLASS.ProductManager.Domain.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AUTOGLASS.ProductManager.Web.Controllers
 {
@@ -6,21 +10,38 @@ namespace AUTOGLASS.ProductManager.Web.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+        private readonly IProductService _productService;
 
-        [HttpGet("{id}")]
-        public string Get(int id)
+        public ProductController(IProductService productService)
         {
-            return "value";
+            _productService = productService;
         }
 
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task Create([FromBody] ProductRequest request)
         {
+            if (request == null)
+            {
+                return;
+            }
+
+            var productDto = BuildProductDto(request);
+            await _productService.Create(productDto);
+        }
+
+        private static ProductDto BuildProductDto(ProductRequest request)
+        {
+            return new ProductDto()
+            {
+                CreateDate = request.CreateDate,
+                Description = request.Description,
+                ExpirationDate = request.ExpirationDate,
+                SupplierDto = new SupplierDto()
+                {
+                    Cnpj = request.Supplier.Cnpj,
+                    Description = request.Supplier.Description
+                }
+            };
         }
 
         [HttpPut("{id}")]

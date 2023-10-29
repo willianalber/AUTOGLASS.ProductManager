@@ -1,4 +1,7 @@
-﻿using AUTOGLASS.ProductManager.Infra.Contex;
+﻿using AUTOGLASS.ProductManager.Domain.Interfaces;
+using AUTOGLASS.ProductManager.Domain.Services;
+using AUTOGLASS.ProductManager.Infra.Contex;
+using AUTOGLASS.ProductManager.Infra.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -17,6 +20,11 @@ namespace AUTOGLASS.ProductManager.Web
         {
             services.AddDbContext<ProductManagerContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddCors();
+
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ISupplierRepository, SupplierRepository>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ISupplierService, SupplierService>();
 
             services.AddControllers();
             services.AddSwaggerGen(x =>
