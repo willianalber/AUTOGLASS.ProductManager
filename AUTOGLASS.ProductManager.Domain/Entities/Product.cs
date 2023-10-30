@@ -13,6 +13,7 @@ namespace AUTOGLASS.ProductManager.Domain.Entities
             CreateDate = dto.CreateDate;
             ExpirationDate = dto.ExpirationDate;
             SupplierId = dto.SupplierId;
+            Supplier = dto.Supplier;
             Status = true;
         }
 

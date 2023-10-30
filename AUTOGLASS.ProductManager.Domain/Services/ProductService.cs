@@ -8,20 +8,14 @@ namespace AUTOGLASS.ProductManager.Domain.Services
 {
     public class ProductService : IProductService
     {
-        private readonly ISupplierRepository _supplierRepository;
         private readonly IProductRepository _productRepository;
-
-        public ProductService(IProductRepository repository,
-            ISupplierRepository supplierRepository)
+        public ProductService(IProductRepository productRepository)
         {
-            _productRepository = repository;
-            _supplierRepository = supplierRepository;
+            _productRepository = productRepository;
         }
 
         public async Task Create(ProductDto productDto)
-        {
-            productDto.Supplier = await _supplierRepository.GetById(productDto.SupplierId);
-            
+        {            
             var product = new Product(productDto);
             Validate(product);
 
@@ -40,7 +34,12 @@ namespace AUTOGLASS.ProductManager.Domain.Services
         public async Task Delete(long productId)
         {
             var product = await _productRepository.GetById(productId);
+
+            if (product is null)
+                return;
+
             product.Disable();
+
             await _productRepository.Update(product);
         }
 
@@ -51,7 +50,7 @@ namespace AUTOGLASS.ProductManager.Domain.Services
 
             return new PaginatedDto<ProductDto>() 
             {
-                Items = productsFiltered.Items,
+                Items = BuildProductsDtos(productsFiltered.Items),
                 ItemsByPage = productsFiltered.ItemsByPage,
                 PageIndex = productsFiltered.PageIndex,
                 TotalItems = productsFiltered.TotalItems
@@ -61,13 +60,24 @@ namespace AUTOGLASS.ProductManager.Domain.Services
         public async Task<ProductDto> GetById(long productId)
         {
             var product = await _productRepository.GetById(productId);
+            if (product is null) 
+                return null;
+
             return BuildProductDto(product);
         }
 
         public async Task Update(ProductDto productDto)
         {
             var product = await _productRepository.GetById(productDto.Id);
+
+            if (product is null)
+            {
+                return;
+            }
+
             product.Update(productDto);
+            Validate(product);
+
             await _productRepository.Update(product);
         }
 
@@ -81,6 +91,11 @@ namespace AUTOGLASS.ProductManager.Domain.Services
                 ExpirationDate = product.ExpirationDate,
                 Supplier = product.Supplier,
             };
+        }
+
+        private IEnumerable<ProductDto> BuildProductsDtos(IEnumerable<Product> products)
+        {
+            return products.Select(x => BuildProductDto(x));
         }
     }
 }

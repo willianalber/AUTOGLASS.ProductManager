@@ -24,33 +24,43 @@ namespace AUTOGLASS.ProductManager.Web.Controllers
         {
             try
             {
+                if (request is null)
+                {
+                    return StatusCode(StatusCodes.Status200OK, null);
+                }
+
                 var productDto = BuildProductDto(request);
                 await _productService.Create(productDto);
-                return StatusCode(200, null);
+                return StatusCode(StatusCodes.Status201Created, null);
             }
             catch (Exception ex)
             {
-                return StatusCode(400, new ErrorResponse()
-                { 
-                    Code = "Dados invalidos", 
-                    Message = ex.Message 
-                });
+                return BuildError(ex);
             }
-            
+
         }        
 
         [HttpPut("{productId}")]
-        public async Task Update(int productId, [FromBody] ProductRequest productRequest)
+        public async Task<ObjectResult> Update(long productId, [FromBody] ProductRequest productRequest)
         {
-            if (productRequest == null)
+            try
             {
-                return;
+                if (productRequest == null)
+                {
+                    return StatusCode(StatusCodes.Status200OK, null);
+                }
+
+                var productDto = BuildProductDto(productRequest);
+                productDto.Id = productId;
+                await _productService.Update(productDto);
+
+                return StatusCode(StatusCodes.Status201Created, null);
             }
-
-            var productDto = BuildProductDto(productRequest);
-            productDto.Id = productId;
-
-            await _productService.Update(productDto);
+            catch (Exception ex)
+            {
+                return BuildError(ex);
+            }           
+            
         }
 
         [HttpDelete("{productId}")]
@@ -80,6 +90,27 @@ namespace AUTOGLASS.ProductManager.Web.Controllers
             };
         }
 
+        [HttpGet("{productId}")]
+        public async Task<ProductResponse> GetById([FromRoute] long productId)
+        {
+            var product = await _productService.GetById(productId);
+            
+            if (product is null)
+            {
+                return default;
+            }
+
+            return new ProductResponse()
+            {
+                ExpirationDate = product.ExpirationDate,
+                Id = product.Id,
+                CreateDate = product.CreateDate,
+                Description = product.Description,
+                Cnpj = product.Supplier.Cnpj,
+                Supplier = product.Supplier.Description,
+            };
+        }
+
         private static ProductDto BuildProductDto(ProductRequest request)
         {
             return new ProductDto()
@@ -89,6 +120,15 @@ namespace AUTOGLASS.ProductManager.Web.Controllers
                 ExpirationDate = request.ExpirationDate,
                 SupplierId = request.SupplierId
             };
+        }
+
+        private ObjectResult BuildError(Exception ex)
+        {
+            return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
+            {
+                Code = "Dados invalidos",
+                Message = ex.Message
+            });
         }
     }
 }

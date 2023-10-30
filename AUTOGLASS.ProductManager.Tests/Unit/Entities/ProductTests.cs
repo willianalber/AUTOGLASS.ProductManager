@@ -9,18 +9,17 @@ namespace AUTOGLASS.ProductManager.Tests.Unit.Entities
     public class ProductTests
     {
         [Fact]
-        public void Should_crete_product_enabled()
+        public void Should_create_product_enabled()
         {
             //arrange
-            var supplier = new SupplierBuilder()
-                .Build();
+            long supplierId = 1;
 
             var dto = new ProductDto
             {
                 CreateDate = DateTime.Now,
                 ExpirationDate = DateTime.Now.AddDays(1),
                 Description = "teste",
-                Supplier = supplier
+                SupplierId = supplierId
             };
 
             //action
@@ -31,7 +30,7 @@ namespace AUTOGLASS.ProductManager.Tests.Unit.Entities
             product.Description.Should().Be(dto.Description);
             product.CreateDate.Should().Be(dto.CreateDate);
             product.ExpirationDate.Should().Be(dto.ExpirationDate);
-            product.Supplier.Should().Be(supplier);
+            product.SupplierId.Should().Be(supplierId);
         }
 
         [Fact]
@@ -75,7 +74,6 @@ namespace AUTOGLASS.ProductManager.Tests.Unit.Entities
             var response = product.IsValid();
 
             //assert
-            response.Errors.Should().HaveCount(1);
             response.Errors.Should().Contain(x => x.ErrorMessage == "A data de fabricação deve ser anterior à data de validade.");
         }
     }

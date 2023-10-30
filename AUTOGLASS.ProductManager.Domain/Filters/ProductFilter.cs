@@ -8,7 +8,7 @@
         public bool? Status { get; set; }
         public string? Supplier { get; set; }
         public string? Cnpj { get; set; }
-        public int ItemsByPage { get; set; }
-        public int PageIndex { get; set; }
+        public int ItemsByPage { get; set; } = 1;
+        public int PageIndex { get; set; } = 1;
     }
 }

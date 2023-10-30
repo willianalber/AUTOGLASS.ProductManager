@@ -32,7 +32,7 @@ namespace AUTOGLASS.ProductManager.Infra.Repositories
             return await _dbContext.Set<TEntity>().ToListAsync();
         }
 
-        public async Task<TEntity> GetById(long id)
+        public virtual async Task<TEntity> GetById(long id)
         {
             return await _dbContext.Set<TEntity>()
                 .FirstOrDefaultAsync(e => e.Id == id);

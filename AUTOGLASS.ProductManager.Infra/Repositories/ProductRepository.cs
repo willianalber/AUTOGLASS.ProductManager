@@ -1,5 +1,4 @@
-﻿using AUTOGLASS.ProductManager.Application.Dtos;
-using AUTOGLASS.ProductManager.Domain.Dtos;
+﻿using AUTOGLASS.ProductManager.Domain.Dtos;
 using AUTOGLASS.ProductManager.Domain.Entities;
 using AUTOGLASS.ProductManager.Domain.Filters;
 using AUTOGLASS.ProductManager.Domain.Interfaces;
@@ -14,7 +13,7 @@ namespace AUTOGLASS.ProductManager.Infra.Repositories
         {
         }
 
-        public async Task<PaginatedDto<ProductDto>> GetByFilter(ProductFilter filter)
+        public async Task<PaginatedDto<Product>> GetByFilter(ProductFilter filter)
         {
             var query = _dbContext.Set<Product>()
                 .Include(x => x.Supplier)
@@ -24,28 +23,16 @@ namespace AUTOGLASS.ProductManager.Infra.Repositories
             var totalItems = query.Count();
 
             query = ApplyPagination(filter, query);
-            var products = await SelectProducts(query).ToListAsync();
+            var products = await query.ToListAsync();
 
-            return new PaginatedDto<ProductDto>
+            return new PaginatedDto<Product>
             {
                 Items = products,
                 TotalItems = totalItems,
                 ItemsByPage = filter.ItemsByPage,
                 PageIndex = filter.PageIndex
             };
-        }
-
-        private IQueryable<ProductDto> SelectProducts(IQueryable<Product> query)
-        {
-            return query.Select(x => new ProductDto
-            {
-                CreateDate = x.CreateDate,
-                Description = x.Description,
-                ExpirationDate = x.ExpirationDate,
-                Id = x.Id,
-                Supplier = x.Supplier,
-            });
-        }
+        }        
 
         private static IQueryable<Product> ApplyPagination(ProductFilter filter, IQueryable<Product> query)
         {
@@ -68,6 +55,13 @@ namespace AUTOGLASS.ProductManager.Infra.Repositories
             if (filter.Cnpj != null)
                 query = query.Where(x => x.Supplier.Cnpj.Contains(filter.Cnpj));
             return query;
+        }
+
+        public override async Task<Product> GetById(long productId)
+        {
+            return await _dbContext.Set<Product>()
+                .Include(x => x.Supplier)
+                .FirstOrDefaultAsync(x => x.Id == productId);
         }
     }
 }

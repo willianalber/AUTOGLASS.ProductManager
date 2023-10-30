@@ -7,6 +7,6 @@ namespace AUTOGLASS.ProductManager.Domain.Interfaces
 {
     public interface IProductRepository : IGenericRepository<Product>
     {
-        Task<PaginatedDto<ProductDto>> GetByFilter(ProductFilter filter);
+        Task<PaginatedDto<Product>> GetByFilter(ProductFilter filter);
     }
 }
