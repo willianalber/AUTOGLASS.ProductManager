@@ -9,7 +9,6 @@ namespace AUTOGLASS.ProductManager.Domain.Interfaces
         Task<TEntity> GetById(long id);
         Task Create(TEntity entity);
         Task Update(TEntity entity);
-        Task Delete(long id);
     }
 
 }

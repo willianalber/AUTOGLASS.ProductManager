@@ -20,13 +20,6 @@ namespace AUTOGLASS.ProductManager.Infra.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task Delete(long id)
-        {
-            var entity = await GetById(id);
-            _dbContext.Set<TEntity>().Remove(entity);
-            await _dbContext.SaveChangesAsync();
-        }
-
         public async Task<IList<TEntity>> GetAll()
         {
             return await _dbContext.Set<TEntity>().ToListAsync();

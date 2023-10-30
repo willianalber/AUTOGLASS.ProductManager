@@ -2,7 +2,6 @@
 using AUTOGLASS.ProductManager.Api.Models.Product;
 using AUTOGLASS.ProductManager.Application.Dtos;
 using AUTOGLASS.ProductManager.Domain.Dtos;
-using AUTOGLASS.ProductManager.Domain.Entities;
 using AUTOGLASS.ProductManager.Domain.Filters;
 using AUTOGLASS.ProductManager.Domain.Services;
 using AUTOGLASS.ProductManager.Tests.Builders;
