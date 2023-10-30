@@ -6,5 +6,6 @@ namespace AUTOGLASS.ProductManager.Domain.Services
     {
         public Task Create(SupplierDto supplierDto);
         public Task<IEnumerable<SupplierDto>> GetAll();
+        public Task Update(SupplierDto supplierDto);
     }
 }

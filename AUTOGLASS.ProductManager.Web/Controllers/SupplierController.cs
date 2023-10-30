@@ -28,6 +28,19 @@ namespace AUTOGLASS.ProductManager.Web.Controllers
             await _supplierService.Create(supplierDto);
         }
 
+        [HttpPut]
+        public async Task Update([FromQuery] long supplierId, [FromBody] SupplierRequest supplierRequest)
+        {
+            var supplierDto = new SupplierDto()
+            {
+                Id = supplierId,
+                Description = supplierRequest.Description,
+                Cnpj = supplierRequest.Cnpj
+            };
+
+            await _supplierService.Update(supplierDto);
+        }
+
         [HttpGet]
         public async Task<IEnumerable<SupplierResponse>> GetAll()
         {

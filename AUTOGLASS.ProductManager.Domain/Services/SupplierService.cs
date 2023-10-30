@@ -15,7 +15,7 @@ namespace AUTOGLASS.ProductManager.Domain.Services
 
         public async Task Create(SupplierDto supplierDto)
         {
-            var supplier = new Supplier(supplierDto.Description, supplierDto.Cnpj);
+            var supplier = new Supplier(supplierDto);
             await _supplierRepository.Create(supplier);
         }
 
@@ -28,6 +28,19 @@ namespace AUTOGLASS.ProductManager.Domain.Services
                 Description = x.Description,
                 Cnpj = x.Cnpj
             });
+        }
+
+        public async Task Update(SupplierDto supplierDto)
+        {
+            var supplier = await _supplierRepository.GetById(supplierDto.Id);
+            if (supplier == null) 
+            {
+                await Create(supplierDto);
+                return;
+            }
+
+            supplier.Update(supplierDto);
+            await _supplierRepository.Update(supplier);
         }
     }
 }

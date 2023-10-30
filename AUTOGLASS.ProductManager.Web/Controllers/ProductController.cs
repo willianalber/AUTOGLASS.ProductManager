@@ -1,6 +1,8 @@
-﻿using AUTOGLASS.ProductManager.Api.Models.Product;
+﻿using AUTOGLASS.ProductManager.Api.Models.Errors;
+using AUTOGLASS.ProductManager.Api.Models.Product;
 using AUTOGLASS.ProductManager.Application.Dtos;
 using AUTOGLASS.ProductManager.Domain.Dtos;
+using AUTOGLASS.ProductManager.Domain.Filters;
 using AUTOGLASS.ProductManager.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,15 +20,64 @@ namespace AUTOGLASS.ProductManager.Web.Controllers
         }
 
         [HttpPost]
-        public async Task Create([FromBody] ProductRequest request)
+        public async Task<ObjectResult> Create([FromBody] ProductRequest request)
         {
-            if (request == null)
+            try
+            {
+                var productDto = BuildProductDto(request);
+                await _productService.Create(productDto);
+                return StatusCode(200, null);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(400, new ErrorResponse()
+                { 
+                    Code = "Dados invalidos", 
+                    Message = ex.Message 
+                });
+            }
+            
+        }        
+
+        [HttpPut("{productId}")]
+        public async Task Update(int productId, [FromBody] ProductRequest productRequest)
+        {
+            if (productRequest == null)
             {
                 return;
             }
 
-            var productDto = BuildProductDto(request);
-            await _productService.Create(productDto);
+            var productDto = BuildProductDto(productRequest);
+            productDto.Id = productId;
+
+            await _productService.Update(productDto);
+        }
+
+        [HttpDelete("{productId}")]
+        public async Task Delete([FromRoute] long productId)
+        {
+            await _productService.Delete(productId);
+        }
+
+        [HttpGet]
+        public async Task<PaginatedDto<ProductResponse>> GetByFilterPaginated([FromQuery] ProductFilter productFilter)
+        {
+            var products = await _productService.GetByFilterPaginated(productFilter);
+            return new PaginatedDto<ProductResponse>()
+            {
+                Items = products.Items.Select(x => new ProductResponse()
+                {
+                    Cnpj = x.Supplier.Cnpj,
+                    Supplier = x.Supplier.Description,
+                    Description = x.Description,
+                    CreateDate = x.CreateDate,
+                    ExpirationDate = x.ExpirationDate,
+                    Id = x.Id
+                }),
+                ItemsByPage = products.ItemsByPage,
+                PageIndex = products.PageIndex,
+                TotalItems = products.TotalItems,
+            };
         }
 
         private static ProductDto BuildProductDto(ProductRequest request)
@@ -36,22 +87,8 @@ namespace AUTOGLASS.ProductManager.Web.Controllers
                 CreateDate = request.CreateDate,
                 Description = request.Description,
                 ExpirationDate = request.ExpirationDate,
-                SupplierDto = new SupplierDto()
-                {
-                    Cnpj = request.Supplier.Cnpj,
-                    Description = request.Supplier.Description
-                }
+                SupplierId = request.SupplierId
             };
-        }
-
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

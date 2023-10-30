@@ -1,12 +1,22 @@
-﻿using AUTOGLASS.ProductManager.Domain.Entities;
+﻿using AUTOGLASS.ProductManager.Domain.Dtos;
+using AUTOGLASS.ProductManager.Domain.Entities;
 
 namespace AUTOGLASS.ProductManager.Tests.Builders
 {
     public class SupplierBuilder
     {
+        private string _description = "teste_desc";
+        private string _cnpj = "teste_cnpj";
+
         public Supplier Build()
         {
-            return new Supplier("Test supplier", "111.111.111-11");
+            var supplierDto = new SupplierDto()
+            {
+                Cnpj = _cnpj,
+                Description = _description
+            };
+
+            return new Supplier(supplierDto);
         }
     }
 }

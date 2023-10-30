@@ -41,9 +41,10 @@ namespace AUTOGLASS.ProductManager.Tests.Builders
             {
                 CreateDate = _createDate,
                 ExpirationDate = _expirationDate,
-                Description = _description
+                Description = _description,
+                Supplier = _supplier
             };
-            return new Product(dto, _supplier);
+            return new Product(dto);
         }
     }
 }

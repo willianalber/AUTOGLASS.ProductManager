@@ -21,10 +21,7 @@ namespace AUTOGLASS.ProductManager.Web
             services.AddDbContext<ProductManagerContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddCors();
 
-            services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddScoped<ISupplierRepository, SupplierRepository>();
-            services.AddScoped<IProductService, ProductService>();
-            services.AddScoped<ISupplierService, SupplierService>();
+            RegisterServices(services);
 
             services.AddControllers();
             services.AddSwaggerGen(x =>
@@ -32,6 +29,16 @@ namespace AUTOGLASS.ProductManager.Web
                 x.SwaggerDoc("v1", new OpenApiInfo { Title = "ProductManager", Version = "v1" });
             });
         }
+
+        private static void RegisterServices(IServiceCollection services)
+        {
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ISupplierRepository, SupplierRepository>();
+
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ISupplierService, SupplierService>();
+        }
+
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

@@ -1,6 +1,7 @@
 ﻿using AUTOGLASS.ProductManager.Application.Dtos;
 using AUTOGLASS.ProductManager.Domain.Dtos;
 using AUTOGLASS.ProductManager.Domain.Entities;
+using AUTOGLASS.ProductManager.Domain.Filters;
 using AUTOGLASS.ProductManager.Domain.Interfaces;
 
 namespace AUTOGLASS.ProductManager.Domain.Services
@@ -19,13 +20,9 @@ namespace AUTOGLASS.ProductManager.Domain.Services
 
         public async Task Create(ProductDto productDto)
         {
-            var supplier = await _supplierRepository.GetByCnpj(productDto.SupplierDto.Cnpj);
-            if (supplier == null)
-            {
-                supplier = new Supplier(productDto.SupplierDto);
-            }
-
-            var product = new Product(productDto, supplier);
+            productDto.Supplier = await _supplierRepository.GetById(productDto.SupplierId);
+            
+            var product = new Product(productDto);
             Validate(product);
 
             await _productRepository.Create(product);
@@ -47,10 +44,18 @@ namespace AUTOGLASS.ProductManager.Domain.Services
             await _productRepository.Update(product);
         }
 
-        public async Task<IEnumerable<ProductDto>> GetAll()
+        public async Task<PaginatedDto<ProductDto>> GetByFilterPaginated(ProductFilter filter)
         {
-            var products = await _productRepository.GetAll();
-            return products.Select(x => BuildProductDto(x));
+            var productsFiltered = await _productRepository.GetByFilter(filter);
+             
+
+            return new PaginatedDto<ProductDto>() 
+            {
+                Items = productsFiltered.Items,
+                ItemsByPage = productsFiltered.ItemsByPage,
+                PageIndex = productsFiltered.PageIndex,
+                TotalItems = productsFiltered.TotalItems
+            };
         }        
 
         public async Task<ProductDto> GetById(long productId)
@@ -63,6 +68,7 @@ namespace AUTOGLASS.ProductManager.Domain.Services
         {
             var product = await _productRepository.GetById(productDto.Id);
             product.Update(productDto);
+            await _productRepository.Update(product);
         }
 
         private ProductDto BuildProductDto(Product product)
@@ -73,11 +79,7 @@ namespace AUTOGLASS.ProductManager.Domain.Services
                 CreateDate = product.CreateDate,
                 Description = product.Description,
                 ExpirationDate = product.ExpirationDate,
-                SupplierDto = new SupplierDto
-                {
-                    Description = product.Supplier.Description,
-                    Cnpj = product.Supplier.Cnpj
-                }
+                Supplier = product.Supplier,
             };
         }
     }

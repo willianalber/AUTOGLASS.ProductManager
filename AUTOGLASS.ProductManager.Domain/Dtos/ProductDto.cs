@@ -1,6 +1,4 @@
-﻿using AUTOGLASS.ProductManager.Domain.Dtos;
-using AUTOGLASS.ProductManager.Domain.Validators;
-using FluentValidation.Results;
+﻿using AUTOGLASS.ProductManager.Domain.Entities;
 
 namespace AUTOGLASS.ProductManager.Application.Dtos
 {
@@ -10,6 +8,7 @@ namespace AUTOGLASS.ProductManager.Application.Dtos
         public string Description { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime ExpirationDate { get; set; }
-        public SupplierDto SupplierDto { get; set; }        
+        public long SupplierId { get; set; }
+        public Supplier Supplier { get; set; }        
     } 
 }

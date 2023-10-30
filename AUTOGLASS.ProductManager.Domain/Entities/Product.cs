@@ -7,12 +7,12 @@ namespace AUTOGLASS.ProductManager.Domain.Entities
     public class Product : EntityBase
     {
         protected Product() { }
-        public Product(ProductDto dto, Supplier supplier)
+        public Product(ProductDto dto)
         {
             Description = dto.Description;
             CreateDate = dto.CreateDate;
             ExpirationDate = dto.ExpirationDate;
-            Supplier = supplier;
+            SupplierId = dto.SupplierId;
             Status = true;
         }
 
@@ -38,6 +38,7 @@ namespace AUTOGLASS.ProductManager.Domain.Entities
             Description = productDto.Description;
             CreateDate = productDto.CreateDate;
             ExpirationDate = productDto.ExpirationDate;
+            SupplierId = productDto.SupplierId;
         }
 
         public ValidationResult IsValid() => new ProductValidator().Validate(this);
