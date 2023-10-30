@@ -5,10 +5,10 @@ namespace AUTOGLASS.ProductManager.Tests.Builders
 {
     public class ProductBuilder 
     {
-        private long _id = 1;
         private string _description = "Product test";
         private DateTime _createDate = DateTime.Now;
         private DateTime _expirationDate = DateTime.Now.AddDays(1);
+        private long _supplierId = 1;
         private Supplier _supplier = new SupplierBuilder().Build();
 
         public ProductBuilder WithDescription(string description) 
@@ -35,6 +35,12 @@ namespace AUTOGLASS.ProductManager.Tests.Builders
             return this;
         }
 
+        public ProductBuilder WithSupplierId(long supplierId)
+        {
+            _supplierId = supplierId;
+            return this;
+        }
+
         public Product Build()
         {
             var dto = new ProductDto
@@ -42,8 +48,10 @@ namespace AUTOGLASS.ProductManager.Tests.Builders
                 CreateDate = _createDate,
                 ExpirationDate = _expirationDate,
                 Description = _description,
-                Supplier = _supplier
+                Supplier = _supplier,
+                SupplierId = _supplierId
             };
+
             return new Product(dto);
         }
     }

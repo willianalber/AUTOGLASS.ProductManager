@@ -19,17 +19,22 @@ namespace AUTOGLASS.ProductManager.Web.Controllers
             _productService = productService;
         }
 
+        /// <summary>
+        /// Create product
+        /// </summary>
+        /// <param name="productRequest">Model to create product</param>
+        /// <returns></returns>
         [HttpPost]
-        public async Task<ObjectResult> Create([FromBody] ProductRequest request)
+        public async Task<ObjectResult> Create([FromBody] ProductRequest productRequest)
         {
             try
             {
-                if (request is null)
+                if (productRequest is null)
                 {
                     return StatusCode(StatusCodes.Status200OK, null);
                 }
 
-                var productDto = BuildProductDto(request);
+                var productDto = BuildProductDto(productRequest);
                 await _productService.Create(productDto);
                 return StatusCode(StatusCodes.Status201Created, null);
             }
@@ -40,6 +45,11 @@ namespace AUTOGLASS.ProductManager.Web.Controllers
 
         }        
 
+        /// <summary>
+        /// Update produt
+        /// </summary>
+        /// <param name="productId">Product id</param>
+        /// <param name="productRequest">Model to update produt</param>
         [HttpPut("{productId}")]
         public async Task<ObjectResult> Update(long productId, [FromBody] ProductRequest productRequest)
         {
@@ -63,12 +73,20 @@ namespace AUTOGLASS.ProductManager.Web.Controllers
             
         }
 
+        /// <summary>
+        /// Inactive a product by id
+        /// </summary>
+        /// <param name="productId">Product id</param>
         [HttpDelete("{productId}")]
         public async Task Delete([FromRoute] long productId)
         {
             await _productService.Delete(productId);
         }
-
+        
+        /// <summary>
+        /// Get products by filter and paginated
+        /// </summary>
+        /// <param name="productFilter">Model to filter products</param>
         [HttpGet]
         public async Task<PaginatedDto<ProductResponse>> GetByFilterPaginated([FromQuery] ProductFilter productFilter)
         {
@@ -90,6 +108,10 @@ namespace AUTOGLASS.ProductManager.Web.Controllers
             };
         }
 
+        /// <summary>
+        /// Get produt by id
+        /// </summary>
+        /// <param name="productId">Id from product</param>
         [HttpGet("{productId}")]
         public async Task<ProductResponse> GetById([FromRoute] long productId)
         {

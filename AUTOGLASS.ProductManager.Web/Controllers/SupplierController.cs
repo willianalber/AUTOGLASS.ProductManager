@@ -16,6 +16,11 @@ namespace AUTOGLASS.ProductManager.Web.Controllers
             _supplierService = supplierService;
         }
 
+
+        /// <summary>
+        /// Create suppler
+        /// </summary>
+        /// <param name="supplierRequest">Model to create supplier</param>
         [HttpPost]
         public async Task Create([FromBody] SupplierRequest supplierRequest)
         {
@@ -28,6 +33,11 @@ namespace AUTOGLASS.ProductManager.Web.Controllers
             await _supplierService.Create(supplierDto);
         }
 
+        /// <summary>
+        /// Update product
+        /// </summary>
+        /// <param name="supplierId">Supplier id</param>
+        /// <param name="supplierRequest">Model to update product</param>
         [HttpPut]
         public async Task Update([FromQuery] long supplierId, [FromBody] SupplierRequest supplierRequest)
         {
@@ -41,6 +51,9 @@ namespace AUTOGLASS.ProductManager.Web.Controllers
             await _supplierService.Update(supplierDto);
         }
 
+        /// <summary>
+        /// Get all suppliers
+        /// </summary>
         [HttpGet]
         public async Task<IEnumerable<SupplierResponse>> GetAll()
         {
