@@ -2,8 +2,10 @@
 using AUTOGLASS.ProductManager.Api.Models.Product;
 using AUTOGLASS.ProductManager.Application.Dtos;
 using AUTOGLASS.ProductManager.Domain.Dtos;
+using AUTOGLASS.ProductManager.Domain.Entities;
 using AUTOGLASS.ProductManager.Domain.Filters;
 using AUTOGLASS.ProductManager.Domain.Services;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AUTOGLASS.ProductManager.Web.Controllers
@@ -13,9 +15,12 @@ namespace AUTOGLASS.ProductManager.Web.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
+        private readonly IMapper _mapper;
 
-        public ProductController(IProductService productService)
+        public ProductController(IProductService productService,
+            IMapper mapper)
         {
+            _mapper = mapper;
             _productService = productService;
         }
 
@@ -25,18 +30,18 @@ namespace AUTOGLASS.ProductManager.Web.Controllers
         /// <param name="productRequest">Model to create product</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ObjectResult> Create([FromBody] ProductRequest productRequest)
+        public async Task<IActionResult> Create([FromBody] ProductRequest productRequest)
         {
             try
             {
                 if (productRequest is null)
                 {
-                    return StatusCode(StatusCodes.Status200OK, null);
+                    return Ok();
                 }
 
-                var productDto = BuildProductDto(productRequest);
+                var productDto = _mapper.Map<ProductDto>(productRequest);
                 await _productService.Create(productDto);
-                return StatusCode(StatusCodes.Status201Created, null);
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -51,20 +56,18 @@ namespace AUTOGLASS.ProductManager.Web.Controllers
         /// <param name="productId">Product id</param>
         /// <param name="productRequest">Model to update produt</param>
         [HttpPut("{productId}")]
-        public async Task<ObjectResult> Update(long productId, [FromBody] ProductRequest productRequest)
+        public async Task<IActionResult> Update(long productId, [FromBody] ProductRequest productRequest)
         {
             try
             {
-                if (productRequest == null)
+                if (productRequest != null)
                 {
-                    return StatusCode(StatusCodes.Status200OK, null);
-                }
+                    var productDto = _mapper.Map<ProductDto>(productRequest);
+                    productDto.Id = productId;
+                    await _productService.Update(productDto);
+                }                
 
-                var productDto = BuildProductDto(productRequest);
-                productDto.Id = productId;
-                await _productService.Update(productDto);
-
-                return StatusCode(StatusCodes.Status201Created, null);
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -93,15 +96,7 @@ namespace AUTOGLASS.ProductManager.Web.Controllers
             var products = await _productService.GetByFilterPaginated(productFilter);
             return new PaginatedDto<ProductResponse>()
             {
-                Items = products.Items.Select(x => new ProductResponse()
-                {
-                    Cnpj = x.Supplier.Cnpj,
-                    Supplier = x.Supplier.Description,
-                    Description = x.Description,
-                    CreateDate = x.CreateDate,
-                    ExpirationDate = x.ExpirationDate,
-                    Id = x.Id
-                }),
+                Items = products.Items.Select(x => _mapper.Map<ProductResponse>(products)),
                 ItemsByPage = products.ItemsByPage,
                 PageIndex = products.PageIndex,
                 TotalItems = products.TotalItems,
@@ -122,31 +117,12 @@ namespace AUTOGLASS.ProductManager.Web.Controllers
                 return default;
             }
 
-            return new ProductResponse()
-            {
-                ExpirationDate = product.ExpirationDate,
-                Id = product.Id,
-                CreateDate = product.CreateDate,
-                Description = product.Description,
-                Cnpj = product.Supplier.Cnpj,
-                Supplier = product.Supplier.Description,
-            };
-        }
-
-        private static ProductDto BuildProductDto(ProductRequest request)
-        {
-            return new ProductDto()
-            {
-                CreateDate = request.CreateDate,
-                Description = request.Description,
-                ExpirationDate = request.ExpirationDate,
-                SupplierId = request.SupplierId
-            };
+            return _mapper.Map<ProductResponse>(product);
         }
 
         private ObjectResult BuildError(Exception ex)
         {
-            return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponse()
+            return BadRequest(new ErrorResponse()
             {
                 Code = "Dados invalidos",
                 Message = ex.Message

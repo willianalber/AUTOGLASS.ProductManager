@@ -18,6 +18,8 @@ namespace AUTOGLASS.ProductManager.Api.Profiles
             CreateMap<SupplierDto, SupplierResponse>();
             
             CreateMap<Product, ProductDto>();
+            CreateMap<ProductRequest, ProductDto>();
+
             CreateMap<ProductDto, Product>();
             CreateMap<ProductDto, ProductResponse>()
                 .ForMember(x => x.Supplier, options => options.MapFrom(x => x.Supplier.Description));

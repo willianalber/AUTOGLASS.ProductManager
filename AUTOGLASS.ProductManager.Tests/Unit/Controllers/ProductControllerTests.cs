@@ -6,8 +6,10 @@ using AUTOGLASS.ProductManager.Domain.Filters;
 using AUTOGLASS.ProductManager.Domain.Services;
 using AUTOGLASS.ProductManager.Tests.Builders;
 using AUTOGLASS.ProductManager.Web.Controllers;
+using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using Xunit;
@@ -17,19 +19,23 @@ namespace AUTOGLASS.ProductManager.Tests.Unit.Controllers
     public class ProductControllerTests
     {
         private readonly IProductService _productService;
+        private readonly IMapper _mapper;
         private readonly ProductController _productController;
 
         public ProductControllerTests()
         {
+            _mapper = Substitute.For<IMapper>();
             _productService = Substitute.For<IProductService>();
-            _productController = new ProductController(_productService);
+            _productController = new ProductController(_productService, _mapper);
         }
 
         [Fact]
         public async Task Should_call_service_to_create_product()
         {
             //arrang
-            var request = new ProductRequest()
+            var request = new ProductRequest();
+
+            var dto = new ProductDto
             {
                 CreateDate = DateTime.Now,
                 Description = "description",
@@ -37,16 +43,18 @@ namespace AUTOGLASS.ProductManager.Tests.Unit.Controllers
                 SupplierId = 1,
             };
 
+            _mapper.Map<ProductDto>(request).Returns(dto);
+
             //action
             await _productController.Create(request);
 
             //assert
             await _productService
                 .Received(1)
-                .Create(Arg.Is<ProductDto>(x => x.CreateDate == request.CreateDate
-                && x.Description == request.Description
-                && x.ExpirationDate == request.ExpirationDate
-                && x.SupplierId == request.SupplierId
+                .Create(Arg.Is<ProductDto>(x => x.CreateDate == dto.CreateDate
+                && x.Description == dto.Description
+                && x.ExpirationDate == dto.ExpirationDate
+                && x.SupplierId == dto.SupplierId
                 ));
         }
 
@@ -69,8 +77,9 @@ namespace AUTOGLASS.ProductManager.Tests.Unit.Controllers
             var result = await _productController.Create(request);
 
             //assert
-            result.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
-            var errorResponse = result.Value as ErrorResponse;
+            var response = result.As<ObjectResult>();
+            response.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            var errorResponse = response.Value as ErrorResponse;
             Assert.NotNull(errorResponse);
             Assert.Equal("Dados invalidos", errorResponse.Code);
             Assert.Equal("Erro ao criar produto", errorResponse.Message);
@@ -80,13 +89,17 @@ namespace AUTOGLASS.ProductManager.Tests.Unit.Controllers
         public async Task Should_call_service_to_update_product()
         {
             //arrang
-            var request = new ProductRequest()
+            var request = new ProductRequest();
+
+            var dto = new ProductDto
             {
                 CreateDate = DateTime.Now,
                 Description = "description",
                 ExpirationDate = DateTime.Now,
                 SupplierId = 1,
             };
+
+            _mapper.Map<ProductDto>(request).Returns(dto);
 
             long productionId = 50;
 
@@ -96,10 +109,10 @@ namespace AUTOGLASS.ProductManager.Tests.Unit.Controllers
             //assert
             await _productService
                 .Received(1)
-                .Update(Arg.Is<ProductDto>(x => x.CreateDate == request.CreateDate
-                && x.Description == request.Description
-                && x.ExpirationDate == request.ExpirationDate
-                && x.SupplierId == request.SupplierId
+                .Update(Arg.Is<ProductDto>(x => x.CreateDate == dto.CreateDate
+                && x.Description == dto.Description
+                && x.ExpirationDate == dto.ExpirationDate
+                && x.SupplierId == dto.SupplierId
                 && x.Id == productionId
                 ));
         }
@@ -108,13 +121,10 @@ namespace AUTOGLASS.ProductManager.Tests.Unit.Controllers
         public async Task Should_return_bad_request_when_update_product_with_error()
         {
             //arrang
-            var request = new ProductRequest()
-            {
-                CreateDate = DateTime.Now,
-                Description = "description",
-                ExpirationDate = DateTime.Now,
-                SupplierId = 1,
-            };
+            var request = new ProductRequest();
+            var dto = new ProductDto();
+
+            _mapper.Map<ProductDto>(request).Returns(dto);
 
             _productService.Update(Arg.Any<ProductDto>())
                 .ThrowsAsync(new Exception("Erro ao editar produto"));
@@ -125,8 +135,9 @@ namespace AUTOGLASS.ProductManager.Tests.Unit.Controllers
             var result = await _productController.Update(productId, request);
 
             //assert
-            result.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
-            var errorResponse = result.Value as ErrorResponse;
+            var response = result.As<ObjectResult>();
+            response.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            var errorResponse = response.Value as ErrorResponse;
             Assert.NotNull(errorResponse);
             Assert.Equal("Dados invalidos", errorResponse.Code);
             Assert.Equal("Erro ao editar produto", errorResponse.Message);
@@ -187,15 +198,17 @@ namespace AUTOGLASS.ProductManager.Tests.Unit.Controllers
         {
             //arrang
             long productId = 20;
-            var product = new ProductDto()
+            var product = new ProductDto();
+            var productResponse = new ProductResponse()
             {
-                Id = 1,
+                Cnpj = "123123",
                 CreateDate = DateTime.Now,
-                Description = "description",
+                Description = "Description",
                 ExpirationDate = DateTime.Now,
-                SupplierId = 1,
-                Supplier = new SupplierBuilder().Build()
+                Id = productId,
+                Supplier = "TESTE"
             };
+            _mapper.Map<ProductResponse>(product).Returns(productResponse);
 
             _productService.GetById(productId).Returns(product);
 
@@ -203,10 +216,10 @@ namespace AUTOGLASS.ProductManager.Tests.Unit.Controllers
             var response = await _productController.GetById(productId);
 
             //assert
-            response.Cnpj.Should().Be(product.Supplier.Cnpj);
-            response.Supplier.Should().Be(product.Supplier.Description);
-            response.CreateDate.Should().Be(product.CreateDate);
-            response.ExpirationDate.Should().Be(product.ExpirationDate);
+            response.Cnpj.Should().Be(productResponse.Cnpj);
+            response.Supplier.Should().Be(productResponse.Supplier);
+            response.CreateDate.Should().Be(productResponse.CreateDate);
+            response.ExpirationDate.Should().Be(productResponse.ExpirationDate);
         }
 
         [Fact]
