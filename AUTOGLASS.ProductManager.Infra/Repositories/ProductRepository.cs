@@ -17,6 +17,7 @@ namespace AUTOGLASS.ProductManager.Infra.Repositories
         {
             var query = _dbContext.Set<Product>()
                 .Include(x => x.Supplier)
+                .Where(x => x.Status)
                 .AsQueryable();
 
             query = ApplyFilter(filter, query);
