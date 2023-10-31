@@ -6,7 +6,7 @@ using AUTOGLASS.ProductManager.Infra.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
-namespace AUTOGLASS.ProductManager.Web
+namespace AUTOGLASS.ProductManager.Api
 {
     public class Startup
     {

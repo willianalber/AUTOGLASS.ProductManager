@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AUTOGLASS.ProductManager.In
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AUTOGLASS.ProductManager.Tests", "AUTOGLASS.ProductManager.Tests\AUTOGLASS.ProductManager.Tests.csproj", "{BF49813D-2BE4-4F53-BDD2-EBE1C170B23C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AUTOGLASS.ProductManager.Api", "AUTOGLASS.ProductManager.Web\AUTOGLASS.ProductManager.Api.csproj", "{D764DA17-E389-4F8F-9BEA-4CBB70B28039}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AUTOGLASS.ProductManager.Api", "AUTOGLASS.ProductManager.Api\AUTOGLASS.ProductManager.Api.csproj", "{D764DA17-E389-4F8F-9BEA-4CBB70B28039}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

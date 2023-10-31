@@ -1,4 +1,4 @@
-using AUTOGLASS.ProductManager.Web;
+using AUTOGLASS.ProductManager.Api;
 using Microsoft.AspNetCore;
 
 public class Program

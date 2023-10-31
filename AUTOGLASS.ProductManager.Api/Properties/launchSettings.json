@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "AUTOGLASS.ProductManager.Web": {
+    "AUTOGLASS.ProductManager.Api": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

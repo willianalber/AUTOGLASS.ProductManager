@@ -25,7 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AUTOGLASS.ProductManager.Domain\AUTOGLASS.ProductManager.Domain.csproj" />
-    <ProjectReference Include="..\AUTOGLASS.ProductManager.Web\AUTOGLASS.ProductManager.Api.csproj" />
+    <ProjectReference Include="..\AUTOGLASS.ProductManager.Api\AUTOGLASS.ProductManager.Api.csproj" />
   </ItemGroup>
 
 </Project>

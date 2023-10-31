@@ -5,7 +5,7 @@ using AUTOGLASS.ProductManager.Domain.Dtos;
 using AUTOGLASS.ProductManager.Domain.Filters;
 using AUTOGLASS.ProductManager.Domain.Services;
 using AUTOGLASS.ProductManager.Tests.Builders;
-using AUTOGLASS.ProductManager.Web.Controllers;
+using AUTOGLASS.ProductManager.Api.Controllers;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;

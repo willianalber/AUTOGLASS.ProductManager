@@ -1,7 +1,7 @@
 ﻿using AUTOGLASS.ProductManager.Api.Models.Supplier;
 using AUTOGLASS.ProductManager.Domain.Dtos;
 using AUTOGLASS.ProductManager.Domain.Services;
-using AUTOGLASS.ProductManager.Web.Controllers;
+using AUTOGLASS.ProductManager.Api.Controllers;
 using AutoMapper;
 using NSubstitute;
 using Xunit;

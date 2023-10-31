@@ -8,7 +8,7 @@ using AUTOGLASS.ProductManager.Domain.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AUTOGLASS.ProductManager.Web.Controllers
+namespace AUTOGLASS.ProductManager.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
