@@ -2,7 +2,6 @@
 using AUTOGLASS.ProductManager.Api.Models.Product;
 using AUTOGLASS.ProductManager.Application.Dtos;
 using AUTOGLASS.ProductManager.Domain.Dtos;
-using AUTOGLASS.ProductManager.Domain.Entities;
 using AUTOGLASS.ProductManager.Domain.Filters;
 using AUTOGLASS.ProductManager.Domain.Services;
 using AutoMapper;
@@ -96,7 +95,7 @@ namespace AUTOGLASS.ProductManager.Api.Controllers
             var products = await _productService.GetByFilterPaginated(productFilter);
             return new PaginatedDto<ProductResponse>()
             {
-                Items = products.Items.Select(x => _mapper.Map<ProductResponse>(products)),
+                Items = products.Items.Select(x => _mapper.Map<ProductResponse>(x)),
                 ItemsByPage = products.ItemsByPage,
                 PageIndex = products.PageIndex,
                 TotalItems = products.TotalItems,
