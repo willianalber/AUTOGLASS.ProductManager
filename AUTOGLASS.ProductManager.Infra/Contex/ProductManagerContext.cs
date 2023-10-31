@@ -11,12 +11,8 @@ namespace AUTOGLASS.ProductManager.Infra.Contex
 
         public ProductManagerContext(DbContextOptions options) : base(options)
         {
-            Database.EnsureCreated();
         }
 
-        public ProductManagerContext()
-        {
-        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ProductManagerContext).Assembly);

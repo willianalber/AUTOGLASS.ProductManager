@@ -1,4 +1,5 @@
-﻿using AUTOGLASS.ProductManager.Domain.Interfaces;
+﻿using AUTOGLASS.ProductManager.Api.Profiles;
+using AUTOGLASS.ProductManager.Domain.Interfaces;
 using AUTOGLASS.ProductManager.Domain.Services;
 using AUTOGLASS.ProductManager.Infra.Contex;
 using AUTOGLASS.ProductManager.Infra.Repositories;
@@ -20,6 +21,7 @@ namespace AUTOGLASS.ProductManager.Web
         {
             services.AddDbContext<ProductManagerContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddCors();
+            services.AddAutoMapper(typeof(DtoToEntityProfile));
 
             RegisterServices(services);
 

@@ -47,9 +47,9 @@ namespace AUTOGLASS.ProductManager.Infra.Repositories
             if (filter.Description != null)
                 query = query.Where(x => x.Description.Contains(filter.Description));
             if (filter.CreateDate.HasValue)
-                query = query.Where(x => x.CreateDate == filter.CreateDate);
+                query = query.Where(x => x.CreateDate.Date == filter.CreateDate);
             if (filter.ExpirationDate.HasValue)
-                query = query.Where(x => x.ExpirationDate == filter.ExpirationDate);
+                query = query.Where(x => x.ExpirationDate.Date == filter.ExpirationDate);
             if (filter.Supplier != null)
                 query = query.Where(x => x.Supplier.Description.Contains(filter.Supplier));
             if (filter.Cnpj != null)

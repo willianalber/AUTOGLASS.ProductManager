@@ -2,6 +2,7 @@
 using AUTOGLASS.ProductManager.Domain.Dtos;
 using AUTOGLASS.ProductManager.Domain.Services;
 using AUTOGLASS.ProductManager.Web.Controllers;
+using AutoMapper;
 using NSubstitute;
 using Xunit;
 
@@ -9,13 +10,15 @@ namespace AUTOGLASS.ProductManager.Tests.Unit.Controllers
 {
     public class SupplierControllerTests
     {
+        private readonly IMapper _mapper;
         private readonly ISupplierService _supplierService;
         private readonly SupplierController _supplierController;
 
         public SupplierControllerTests()
         {
+            _mapper = Substitute.For<IMapper>();
             _supplierService = Substitute.For<ISupplierService>();
-            _supplierController = new SupplierController(_supplierService);
+            _supplierController = new SupplierController(_supplierService, _mapper);
         }
 
         [Fact]
@@ -23,6 +26,13 @@ namespace AUTOGLASS.ProductManager.Tests.Unit.Controllers
         {
             //arrange
             var supplierRequest = new SupplierRequest { Description = "Fornecedor ABC", Cnpj = "12345678901234" };
+            var dto = new SupplierDto()
+            {
+                Cnpj = supplierRequest.Cnpj,
+                Description = supplierRequest.Description,
+            };
+
+            _mapper.Map<SupplierDto>(supplierRequest).Returns(dto);
 
             //action
             await _supplierController.Create(supplierRequest);
@@ -40,6 +50,12 @@ namespace AUTOGLASS.ProductManager.Tests.Unit.Controllers
             //arrange
             var supplierId = 1;
             var supplierRequest = new SupplierRequest { Description = "Fornecedor ABC", Cnpj = "12345678901234" };
+            var dto = new SupplierDto() 
+            { 
+                Description = supplierRequest.Description,
+                Cnpj = supplierRequest.Cnpj
+            };
+            _mapper.Map<SupplierDto>(supplierRequest).Returns(dto);
 
             //act
             await _supplierController.Update(supplierId, supplierRequest);
@@ -55,13 +71,31 @@ namespace AUTOGLASS.ProductManager.Tests.Unit.Controllers
         public async Task Should_call_service_to_get_all_suppliers_and_map_to_response()
         {
             //arrange
+            var supplier1 = new SupplierDto { Id = 1, Description = "Fornecedor 1", Cnpj = "123" };
+            var supplier2 = new SupplierDto { Id = 2, Description = "Fornecedor 2", Cnpj = "456" };
             var suppliersDtos = new List<SupplierDto>
             {
-                new SupplierDto { Id = 1, Description = "Fornecedor 1", Cnpj = "123" },
-                new SupplierDto { Id = 2, Description = "Fornecedor 2", Cnpj = "456" }
+                supplier1,
+                supplier2
             };
 
             _supplierService.GetAll().Returns(suppliersDtos);
+
+            var supplier1Response = new SupplierResponse()
+            {
+                Id = 1,
+                Cnpj = "123",
+                Description = "Fornecedor 1"
+            };
+            _mapper.Map<SupplierResponse>(supplier1).Returns(supplier1Response);
+
+            var supplier2Response = new SupplierResponse()
+            {
+                Id = 2,
+                Cnpj = "456",
+                Description = "Fornecedor 2"
+            };
+            _mapper.Map<SupplierResponse>(supplier2).Returns(supplier2Response);
 
             //act
             var result = await _supplierController.GetAll();
